@@ -4,9 +4,9 @@ const {
   getSingleUser,
   createUser,
   deleteUser,
-  addThought,
-  removeThought,
-} = require('../../controllers/userController');
+  addReaction,
+  removeReaction,
+} = require('../../controllers/userController.js');
 
 // /api/students
 router.route('/').get(getUsers).post(createUser);
