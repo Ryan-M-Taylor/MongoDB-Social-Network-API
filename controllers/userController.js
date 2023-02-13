@@ -65,13 +65,11 @@ module.exports = {
       });
   },
 
-  // Add a reaction to a user
-  addReaction(req, res) {
-    console.log('You are adding a reaction');
-    console.log(req.body);
+// add a friend to a user's friend list
+  addFriend(req, res) {
     User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $addToSet: { reactions: req.body } },
+      { $addToSet: { friends: req.params.friendId } },
       { runValidators: true, new: true }
     )
       .then((user) =>
@@ -83,11 +81,29 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err));
   },
-  // Remove reaction from a user
-  removeReaction(req, res) {
+
+//delete a friend from a user's friend list
+  deleteFriend(req, res) {
     User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $pull: { reaction: { reactionId: req.params.reactionId } } },
+      { $pull: { friends: req.params.friendId } },
+      { runValidators: true, new: true }
+    )
+      .then((user) =>
+        !user
+          ? res
+              .status(404)
+              .json({ message: 'No user found with that ID :(' })
+          : res.json(user)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
+
+  // update a user by its _id
+  updateUser(req, res) {
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      req.body,
       { runValidators: true, new: true }
     )
       .then((user) =>
